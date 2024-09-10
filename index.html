@@ -3,46 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario</title>
+    <title>promesas</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Formularios</h1>
-        <form id="Formularios"  novalidate>
-            <input 
-                class="form-control mb-2"
-                type="text" 
-                name="userName" 
-                placeholder="Ingrese nombre " 
-                autocomplete="off" 
-                id="userName"
-                required
-                minlength="3"
-                maxlength="10"
-                pattern="^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$"
-             />
-
-            <p class="text-danger mb-2 d-none" id="alertName"></p>
-
-            <input class="form-control mb-2" 
-                type="text"
-                name="userEmail" 
-                placeholder="Ingrese correo " 
-                autocomplete="off" 
-                id="userEmail"
-                pattern="^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$"
-                required
-                title="Ingrese un  correo valido"
-            />
-
-            <p class="text-danger mb-2 d-none" id="alertEmail"></p>
-
-            <button type="submit" class="btn btn-primary">Enviar</button>
-        </form>
-        <div class="alert alert-success d-none my-2" id="alertSuccess">
-           
-        </div>   
-    </div>
+    <h1>promesas</h1>
+            
     <script src="./app.js"></script>
     
 </body>
