@@ -1,154 +1,62 @@
-// //elementos del DOM
-// const formulario=document.querySelector('#formulario')
-// const cardsEstudiantes=document.querySelector('#cardsEstudiantes')
-// const cardsProfesores=document.querySelector('#cardsProfesores')
-// const templateEstudiante=document.querySelector('#templateEstudiante').content
-// const templateProfesor=document.querySelector('#templateProfesor').content
-// const alert=document.querySelector('.alert');
-// const estudiantes=[];
-// const profesores=[];
+const formulario = document.querySelector("#formulario");
+const pintarTodo = document.querySelector("#pintarTodo");
+const templateTodo = document.querySelector("#templateTodo").content;
+const alert = document.querySelector(".alert");
+let todos = [];
 
-// document.addEventListener("click",(e)=>{
-    
-//     if((e.target.dataset.uid)){
-//         // console.log(e.target.matches(".btn-success"))
-//         if(e.target.matches(".btn-success")){
-//             estudiantes.map((item) =>{
-//                 if(item.uid===e.target.dataset.uid){
-//                     item.setEstado=true;
-//                 }
-//                 console.log(item);
-//                 return item;
-//             });
+const agregarTodo = (todo) => {
+  const objetoTodo = {
+    nombre: todo,
+    id: `${Date.now()}`,
+  };
+  todos.push(objetoTodo);
+};
 
-//         }
-//         if(e.target.matches(".btn-danger")){
-//             estudiantes.map((item)=>{
-//                 if(item.uid===e.target.dataset.uid){
-//                     item.setEstado=false;
-//                 }
-//                 console.log(item)
-//                 return item
-//             });
+const pintarTodos = () => {
+  localStorage.setItem("todos", JSON.stringify(todos));
+  pintarTodo.textContent = "";
 
-//         }
-//         Persona.pintarPersonaUI(estudiantes,"Estudiante")
+  const fragment = document.createDocumentFragment();
 
-//      }
-// });
-// // escuchar evento submit
-// formulario.addEventListener('submit',e=>{
-//     e.preventDefault()
+  todos.forEach((item) => {
+    const clone = templateTodo.cloneNode(true);
+    clone.querySelector(".lead").textContent = item.nombre;
+    clone.querySelector(".btn").dataset.id = item.id;
+    fragment.appendChild(clone);
+  });
 
-//     alert.classList.add('d-none')
-    
+  pintarTodo.appendChild(fragment);
+};
 
-//     const datos=new FormData(formulario)
-//     const[nombre,edad,opcion]=[...datos.values()];
+//delegacion de eventos
+document.addEventListener("click", (e) => {
+  // console.log(e.target.dataset.id);
+  // console.log(e.target.matches(".btn-danger"));
+  if (e.target.matches(".btn-danger")) {
+    todos = todos.filter((item) => item.id !== e.target.dataset.id);
+  }
+  pintarTodos();
+});
 
-//     if(!nombre.trim() || !edad.trim() || !opcion.trim()){
-//         console.log("envia mensaje")
-//         alert.classList.remove('d-none')
-//         return
-//     }
-    
-//     //verifica si es un estudiante 
-//     if(opcion==="Estudiante"){
-//         const estudiante=new Estudiante(nombre,edad)
-//         estudiantes.push(estudiante);
-//         Persona.pintarPersonaUI(estudiantes, opcion)
-//     }
+formulario.addEventListener("submit", (e) => {
+  e.preventDefault();
+  alert.classList.add("d-none");
 
-//     if(opcion=="Profesor"){
-//         const profesor=new Profesor(nombre,edad);
-//         profesores.push(profesor)
-//         Persona.pintarPersonaUI(profesores,opcion)
-//     }
+  const data = new FormData(formulario);
+  const [todo] = [...data.values()];
 
-// })
+  if (!todo.trim()) {
+    alert.classList.remove("d-none");
+    return;
+  }
 
+  agregarTodo(todo);
+  pintarTodos();
+});
 
-
-
-// class Persona{
-//     constructor(nombre,edad){
-//         this.nombre=nombre
-//         this.edad=edad 
-//         this.uid=`${Date.now()}`;
-//     }
-
-//     static pintarPersonaUI(personas,tipo){
-//         if(tipo==="Estudiante"){
-//             cardsEstudiantes.textContent="";
-//             const fragment=document.createDocumentFragment()
-//             personas.forEach((item) => {
-//                 fragment.appendChild(item.agregarNuevoEstudiante())
-//             });
-//             cardsEstudiantes.appendChild(fragment);
-//         }
-//         if(tipo==="Profesor"){
-//             cardsProfesores.textContent="";
-//             const fragment=document.createDocumentFragment()
-//             personas.forEach((item) => {
-//                 fragment.appendChild(item.agregarNuevoProfesor())
-//             });
-//             cardsProfesores.appendChild(fragment);
-//         }
-//     }
-// }
-// class Estudiante extends Persona{
-//     #estado=false;
-//     #estudiante="Estudiante"
-
-//     set setEstado(estado){
-//         this.#estado=estado
-//     }
-
-//     get getEstudiante(){
-//         return this.#estudiante
-//     }
-//     agregarNuevoEstudiante(){
-//         const clone=templateEstudiante.cloneNode(true)
-//         clone.querySelector('h5 .text-primary').textContent=this.nombre;
-//         clone.querySelector("h6").textContent=this.getEstudiante;
-//         clone.querySelector(".lead").textContent=this.edad;
-//         if(this.#estado){
-//             clone.querySelector('.badge').className="badge bg-success";
-//             clone.querySelector(".btn-success").disabled=true;
-//             clone.querySelector(".btn-danger").disabled=false;
-
-//         }else{
-//             clone.querySelector('.badge').className="badge bg-danger";
-//             clone.querySelector(".btn-danger").disabled=true;
-//             clone.querySelector(".btn-success").disabled=false;
-
-//         }
-//        clone.querySelector(".badge").textContent=this.#estado ? "Aprobado":"Reprobado";
-        
-//        clone.querySelector(".btn-danger").dataset.uid=this.uid;
-//        clone.querySelector(".btn-success").dataset.uid=this.uid;
-        
-//         return clone;
-//     }
-
-// }
-
-// class Profesor extends Persona{
-//     #profesor="Profesor"
-//     agregarNuevoProfesor(){
-//         const clone= templateProfesor.cloneNode(true);
-//         clone.querySelector("h5").textContent=this.nombre;
-//         clone.querySelector("h6").textContent=this.#profesor
-//         clone.querySelector(".lead").textContent=this.edad;
-//         return clone;
-//     }
-    
-// }
-import {pintarPlatano,frutilla, Fruta}from "./frutas.js";
-
-import melon from "./frutas.js";
-console.log(melon);
-pintarPlatano();
-frutilla();
-const guinda=new Fruta("guinda")
-console.log(guinda)
+document.addEventListener("DOMContentLoaded", (e) => {
+  if (localStorage.getItem("todos")) {
+    todos = JSON.parse(localStorage.getItem("todos"));
+    pintarTodos();
+  }
+});
